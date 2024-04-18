@@ -1,0 +1,22 @@
+[
+  {
+    "company_name": "Apple Inc.",
+    "ticker_symbol": "AAPL",
+    "share_price": 150.25
+  },
+  {
+    "company_name": "Microsoft Corporation",
+    "ticker_symbol": "MSFT",
+    "share_price": 250.50
+  },
+  {
+    "company_name": "Amazon.com Inc.",
+    "ticker_symbol": "AMZN",
+    "share_price": 3300.75
+  },
+  {
+    "company_name": "Google LLC",
+    "ticker_symbol": "GOOGL",
+    "share_price": 2800.00
+  }
+]

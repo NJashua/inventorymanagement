@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Company Details</h1>
+        <div class="details-container">
+            {% if company %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Company Name</td>
+                        <td>{{ company.company_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Ticker Symbol</td>
+                        <td>{{ company.ticker_symbol }}</td>
+                    </tr>
+                    <tr>
+                        <td>Share Price</td>
+                        <td>${{ company.share_price }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endif %}
+            {% if error %}
+            <p>{{ error }}</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
