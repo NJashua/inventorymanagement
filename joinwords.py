@@ -22,4 +22,4 @@ print("davidson " + "age is 28")
 # digit reversing 
 """
 digit = input("enter digit value: ")
-print("reverse val is: " + digit[::-1])
+print("reverse value is: " + digit[::-1])
