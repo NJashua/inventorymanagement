@@ -1,0 +1,25 @@
+<!-- product.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title class="product-title">Product Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1 class="product-title">Product Details</h1>
+    <div class="product-details">
+        {% if product %}
+            <h2 class="head">{{ product[1] }}</h2> 
+            <p class="para">Description: {{ product[4] }}</p>
+            <p class="para">Price: {{ product[3] }}</p> 
+            <p class="para">Quantity Available: {{ product[2] }}</p> 
+            <img src="{{ product[5] }}" alt="{{ product[1] }}">
+            <a href="/"><button class="button">GO Back</button></a>
+        {% else %}
+            <p>Product not found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,3 +1,4 @@
+from flask import Flask, render_template
 import snowflake.connector
 
 # Snowflake connection parameters
@@ -5,33 +6,69 @@ snowflake_config = {
     'user': 'NITHIN',
     'password': 'Nithin@2024',
     'account': 'azqcwil-tf37140',
-    'database': 'PRODUCTSDATA', 
-    'schema': 'PRODUCTSDATA.PUBLIC' 
+    'database': 'PRODUCTSDATA',
+    'schema': 'PRODUCTSDATA.PUBLIC'
 }
 
-try:
-    # Connect to Snowflake
-    conn = snowflake.connector.connect(**snowflake_config)
-    cursor = conn.cursor()
+app = Flask(__name__)
 
-    # Function to insert product details
-    def insert_product(product_id, name, quantity, price, description, image_url):
-        cursor.execute("INSERT INTO PRODUCTS (PRODUCT_ID, NAME, QUANTITY, PRICE, DESCRIPTION, IMAGE_URL) VALUES (%s, %s, %s, %s, %s, %s)",
-                       (product_id, name, quantity, price, description, image_url))
-        conn.commit()
+# Function to fetch product data from Snowflake
+def get_products():
+    products = []
+    try:
+        # Connect to Snowflake
+        conn = snowflake.connector.connect(**snowflake_config)
+        cursor = conn.cursor()
 
-    # Example usage
-    insert_product(1, 'Vivo V29', 5, 25999, 'mobile for good camera with best features', 'https://www.91-img.com/gallery_images_uploads/c/d/cdd9c8786c37fbc15e675fe6da9e507391581a55.JPG?tr=h-550,w-0,c-at_max')
+        # Execute SQL query to fetch product data
+        cursor.execute("SELECT * FROM PRODUCTS")
 
-    # Close the connection
-    cursor.close()
-    conn.close()
+        # Fetch all rows
+        products = cursor.fetchall()
 
-except snowflake.connector.errors.ProgrammingError as e:
-    print("Snowflake programming error:", e)
-except snowflake.connector.errors.DatabaseError as e:
-    print("Snowflake database error:", e)
-except snowflake.connector.errors.ForbiddenError as e:
-    print("Snowflake forbidden error:", e)
-except Exception as e:
-    print("An unexpected error occurred:", e)
+    except Exception as e:
+        print("An error occurred while fetching product data:", e)
+    finally:
+        # Close connection
+        cursor.close()
+        conn.close()
+
+    return products
+
+# Function to fetch product by name
+def get_product_by_name(name):
+    product = None
+    try:
+        # Connect to Snowflake
+        conn = snowflake.connector.connect(**snowflake_config)
+        cursor = conn.cursor()
+
+        # Execute SQL query to fetch product data by name
+        cursor.execute("SELECT * FROM PRODUCTS WHERE NAME = %s", (name,))
+
+        # Fetch the row
+        product = cursor.fetchone()
+
+    except Exception as e:
+        print("An error occurred while fetching product by name:", e)
+    finally:
+        # Close connection
+        cursor.close()
+        conn.close()
+
+    return product
+
+@app.route('/')
+def index():
+    # Fetch product data
+    products = get_products()
+    return render_template('index.html', products=products)
+
+@app.route('/product/<string:name>')
+def product(name):
+    # Fetch product data by name
+    product = get_product_by_name(name)
+    return render_template('product.html', product=product)
+
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,0 +1,26 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Listing</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Product Listing</h1>
+    <div class="product-list">
+        {% if products %}
+            {% for product in products %}
+                <div class="product">
+                    <h2>{{ product[1] }}</h2> <!-- Assuming name is at index 1 in the product tuple -->
+                    <p>Price: {{ product[3] }}</p> <!-- Assuming price is at index 3 in the product tuple -->
+                    <a href="/product/{{ product[1] }}">View Details</a> <!-- Assuming name is used for product details route -->
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No products available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
