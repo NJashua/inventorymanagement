@@ -12,21 +12,27 @@
         {% if cart_contents %}
             {% for item in cart_contents %}
                 <div class="product">
-                    <h2>{{ item[1] }}</h2>
-                    <p>Price: {{ item[3] }}</p>
-                    <form action="/remove_from_cart/{{ item[1] }}" method="post">
-                        <button type="submit" class="button">Remove from Cart</button>
-                        <a href="/"><button class="button">Continue Shopping</button></a>
-                    </form>
+                    <div class="product-details">
+                        <h2>{{ item[1] }}</h2>
+                        <p class="para">Description: {{ item[4] }}</p>
+                        <p class="para">Price: {{ item[3] }}</p>
+                        <p class="para">Quantity Available: {{ item[2] }}</p>
+                        <form action="/remove_from_cart/{{ item[1] }}" method="post">
+                            <button type="submit" class="button">Remove from Cart</button>
+                        </form>
+                        <a href="/"><button type="button" class="button">GO Back</button></a>
+                    </div>
+                    <div class="side-image">
+                        <img src="{{ item[5] }}" alt="{{ item[1] }}">
+                    </div>
                 </div>
             {% endfor %}
         {% else %}
             <p class="empty-para">Your cart is empty...:)</p>
         {% endif %}
     </div>
-   <!-- it's in out side of the form,so i moved into inside as cotinue shopping and remove carkItems...!
-     <form action="/checkout" method="post">
+    <form action="/checkout" method="post">
         <button type="submit" class="button">Checkout</button>
-    </form>-->
+    </form>
 </body>
 </html>
