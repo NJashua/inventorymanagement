@@ -23,6 +23,7 @@ h1, h2 {
     padding: 20px;
     margin: 10px;
     width: 300px;
+    background-image:linear-gradient(to right,#ffffff, #acaaaa);;
 }
 
 .product h2 {
@@ -72,4 +73,13 @@ h1, h2 {
     font-family: "Roboto";
     font-size: 35px;
     font-weight: 700;
+}
+.title-heading{
+    margin-left: 30px;
+    color: #5c0000;
+}
+.title-size{
+    font-size: 40px;
+    color: #5c0000;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1 class="empty-para">Shopping Cart</h1>
+    <h1 class="title-heading">Shopping Cart</h1>
     <div class="product-list">
         {% if cart_contents %}
             {% for item in cart_contents %}
@@ -24,7 +24,8 @@
             <p class="empty-para">Your cart is empty...:)</p>
         {% endif %}
     </div>
-   <!-- <form action="/checkout" method="post">
+   <!-- it's in out side of the form,so i moved into inside as cotinue shopping and remove carkItems...!
+     <form action="/checkout" method="post">
         <button type="submit" class="button">Checkout</button>
     </form>-->
 </body>

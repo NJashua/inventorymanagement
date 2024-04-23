@@ -1,0 +1,138 @@
+Sure, let's go through the code line by line:
+
+python
+Copy code
+from flask import Flask, render_template, session, redirect, url_for
+import snowflake.connector
+This imports necessary modules from Flask (Flask, render_template, session, redirect, url_for) and snowflake.connector for connecting to the Snowflake database.
+python
+Copy code
+snowflake_config = {
+    'user': 'NITHIN',
+    'password': 'Nithin@2024',
+    'account': 'azqcwil-tf37140',
+    'database': 'PRODUCTSDATA',
+    'schema': 'PRODUCTSDATA.PUBLIC'
+}
+This dictionary snowflake_config contains the configuration parameters required to connect to the Snowflake database.
+python
+Copy code
+app = Flask(__name__)
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+This creates a Flask application instance and sets a secret key. The secret key is used to cryptographically sign session cookies.
+python
+Copy code
+def get_products():
+    # Function to fetch product data from Snowflake
+This function get_products() is defined to retrieve product data from the Snowflake database.
+python
+Copy code
+def get_product_by_name(name):
+    # Function to fetch product by name
+This function get_product_by_name(name) is defined to retrieve a specific product by its name from the Snowflake database.
+python
+Copy code
+def add_to_cart(name):
+    # Function to add product to cart
+This function add_to_cart(name) is defined to add a product to the shopping cart session.
+python
+Copy code
+def remove_from_cart(name):
+    # Function to remove product from cart
+This function remove_from_cart(name) is defined to remove a product from the shopping cart session.
+python
+Copy code
+def get_cart():
+    # Function to get cart contents
+This function get_cart() is defined to retrieve the contents of the shopping cart session.
+python
+Copy code
+@app.route('/')
+def index():
+    # Fetch product data
+    # Render the index.html template with product data
+This is a route decorator for the index page. It fetches product data and renders the index.html template with the product data.
+python
+Copy code
+@app.route('/product/<string:name>')
+def product(name):
+    # Fetch product data by name
+    # Render the product.html template with product data
+This is a route decorator for displaying product details. It fetches product data by name and renders the product.html template with the product data.
+python
+Copy code
+@app.route('/add_to_cart/<string:name>', methods=['POST'])
+def add_to_cart_route(name):
+    # Add the product to the cart
+    # Redirect to the index page
+This is a route decorator for adding a product to the cart. It calls the add_to_cart function and redirects to the index page after adding the product to the cart.
+python
+Copy code
+@app.route('/remove_from_cart/<string:name>', methods=['POST'])
+def remove_from_cart_route(name):
+    # Remove the product from the cart
+    # Redirect to the cart page
+This is a route decorator for removing a product from the cart. It calls the remove_from_cart function and redirects to the cart page after removing the product from the cart.
+python
+Copy code
+@app.route('/cart')
+def cart():
+    # Get the cart contents
+    # Render the cart.html template with cart contents
+This is a route decorator for the cart page. It retrieves the cart contents and renders the cart.html template with the cart contents.
+python
+Copy code
+if __name__ == '__main__':
+    app.run(debug=True)
+This conditional block runs the Flask application if the script is executed directly (not imported as a module). The debug=True argument enables debug mode for the application.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ID    Name                    Quantity    Price       Description                                  Image URL
+--------------------------------------------------------------------------------------------------------------
+1     Apple                   100         2.5         Fresh and crispy red apple                  https://example.com/apple.jpg
+2     Banana                  150         1.5         Ripe and sweet yellow banana                 https://example.com/banana.jpg
+3     Orange                  120         2.0         Juicy and tangy orange                       https://example.com/orange.jpg
+4     Tomato                  80          1.0         Plump and ripe red tomato                    https://example.com/tomato.jpg
+
+100   Blue Yeti USB Mic       15          100         Professional-quality USB microphone          https://example.com/yetimic.jpg
+
+
+

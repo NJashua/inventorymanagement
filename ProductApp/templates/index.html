@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Listing</title>
+   
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Product Listing</h1>
+    <h3 class="title-heading title-size">Product Listing</h3>
     <div class="product-list">
         {% if products %}
             {% for product in products %}
                 <div class="product">
                     <h2>{{ product[1] }}</h2>
                     <p>Price: {{ product[3] }}</p>
-                    <form action="/add_to_cart/{{ product[1] }}" method="post">
+                    <form class="form" action="/add_to_cart/{{ product[1] }}" method="post">
                         <button type="submit" class="button">Add to Cart</button>
                     </form>
                     <a href="/product/{{ product[1] }}"><button type="submit" class="button">View Details</button></a>
@@ -24,15 +24,15 @@
             <p>No products available.</p>
         {% endif %}
     </div>
-    <!-- Display cart items -->
+    <!--Here Display cart items Budy-->
     <div class="cart">
-        <h2>Shopping Cart</h2>
+        <h2 class="title-heading">Shopping Cart</h2>
         <ul>
             {% for item in cart_contents %}
                 <li>{{ item[1] }} - {{ item[3] }}</li>
             {% endfor %}
         </ul>
-        <a href="/cart"><button class="button">View Cart</button></a>
+        <a href="/cart"><button class="button title-heading">View Cart</button></a>
     </div>
 </body>
 </html>
