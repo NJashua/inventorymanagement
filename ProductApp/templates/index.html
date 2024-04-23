@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,14 +12,27 @@
         {% if products %}
             {% for product in products %}
                 <div class="product">
-                    <h2>{{ product[1] }}</h2> <!-- Assuming name is at index 1 in the product tuple -->
-                    <p>Price: {{ product[3] }}</p> <!-- Assuming price is at index 3 in the product tuple -->
-                    <a href="/product/{{ product[1] }}">View Details</a> <!-- Assuming name is used for product details route -->
+                    <h2>{{ product[1] }}</h2>
+                    <p>Price: {{ product[3] }}</p>
+                    <form action="/add_to_cart/{{ product[1] }}" method="post">
+                        <button type="submit" class="button">Add to Cart</button>
+                    </form>
+                    <a href="/product/{{ product[1] }}"><button type="submit" class="button">View Details</button></a>
                 </div>
             {% endfor %}
         {% else %}
             <p>No products available.</p>
         {% endif %}
+    </div>
+    <!-- Display cart items -->
+    <div class="cart">
+        <h2>Shopping Cart</h2>
+        <ul>
+            {% for item in cart_contents %}
+                <li>{{ item[1] }} - {{ item[3] }}</li>
+            {% endfor %}
+        </ul>
+        <a href="/cart"><button class="button">View Cart</button></a>
     </div>
 </body>
 </html>

@@ -1,4 +1,3 @@
-<!-- product.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +10,12 @@
     <h1 class="product-title">Product Details</h1>
     <div class="product-details">
         {% if product %}
-            <h2 class="head">{{ product[1] }}</h2> 
+            <h2 class="head">{{ product[1] }}</h2>
             <p class="para">Description: {{ product[4] }}</p>
-            <p class="para">Price: {{ product[3] }}</p> 
-            <p class="para">Quantity Available: {{ product[2] }}</p> 
+            <p class="para">Price: {{ product[3] }}</p>
+            <p class="para">Quantity Available: {{ product[2] }}</p>
             <img src="{{ product[5] }}" alt="{{ product[1] }}">
-            <a href="/"><button class="button">GO Back</button></a>
+            <a href="/"><button type="submit" class="button">GO Back</button></a>
         {% else %}
             <p>Product not found.</p>
         {% endif %}

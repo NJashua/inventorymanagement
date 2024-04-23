@@ -56,7 +56,7 @@ h1, h2 {
     border-radius: 4px;
     border-color: hsl(20, 98%, 16%);
     color: #000000;
-
+    margin-bottom: 10px;
 }
 .head{
     color: rgb(82, 12, 12);
@@ -66,4 +66,10 @@ h1, h2 {
 }
 .product-title{
     color: #7a0000;
+}
+.empty-para{
+    color: #5c0000;
+    font-family: "Roboto";
+    font-size: 35px;
+    font-weight: 700;
 }
