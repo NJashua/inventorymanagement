@@ -1,6 +1,6 @@
 import snowflake.connector
 
-# Define your Snowflake connection parameters
+# Snowflake connection parameters
 snowflake_config = {
     'user': 'NITHIN',
     'password': 'Nithin@2024',
@@ -9,7 +9,7 @@ snowflake_config = {
     'schema': 'PRODUCTSDATA.PUBLIC'
 }
 
-# Define your product data with new image URLs
+
 product_data = [
     (12, 'Ground Beef (1lb)', 25, 6, 'Premium ground beef', 'https://img.freepik.com/premium-photo/uncooked-spiced-minced-meat-artistically-isolated-stark-white-background_829699-6768.jpg?w=740'),
     (13, 'Salmon Fillet', 15, 10, 'Fresh wild-caught salmon', 'https://img.freepik.com/free-photo/slice-raw-salmon_144627-11093.jpg?t=st=1713890953~exp=1713894553~hmac=f095a7e145f90dfaa1bcca31eca0f6d3afba4e7c52c25473b81aa2e0f45826b0&w=826'),
@@ -50,17 +50,17 @@ product_data = [
 ]
 
 try:
-    # Connect to Snowflake
+    # Connection with the snowflake budy
     conn = snowflake.connector.connect(**snowflake_config)
     cursor = conn.cursor()
 
-    # Iterate through the product_data list and update each product's image URL
+    # updating produxts data_images
     for product in product_data:
         product_id, name, quantity, price, description, new_image_url = product
         cursor.execute("UPDATE PRODUCTS SET IMAGE_URL = %s WHERE PRODUCT_ID = %s", (new_image_url, product_id))
         conn.commit()
 
-    # Close the cursor and connection
+    # Close it now other wise..!
     cursor.close()
     conn.close()
 
