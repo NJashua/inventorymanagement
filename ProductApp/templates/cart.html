@@ -13,7 +13,7 @@
             {% for item in cart_contents %}
                 <div class="product">
                     <div class="product-details">
-                        <h2>{{ item[1] }}</h2>
+                        <h2 class="head">{{ item[1] }}</h2>
                         <p class="para">Description: {{ item[4] }}</p>
                         <p class="para">Price: {{ item[3] }}</p>
                         <p class="para">Quantity Available: {{ item[2] }}</p>
@@ -31,8 +31,5 @@
             <p class="empty-para">Your cart is empty...:)</p>
         {% endif %}
     </div>
-    <form action="/checkout" method="post">
-        <button type="submit" class="button">Checkout</button>
-    </form>
 </body>
 </html>
