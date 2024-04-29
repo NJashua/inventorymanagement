@@ -29,3 +29,31 @@ headers = {
 response = requests.get(url, headers=headers, params=querystring)
 
 print(response.json())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mid = left + (right - left) // 2
+
+mid = 1 + (12 - 1) // 2

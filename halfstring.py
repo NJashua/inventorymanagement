@@ -1,5 +1,16 @@
-# enter a word and it will return half of the word 
-string_val = input("Enter a string")
-len_ofstring = len(string_val)
-result = int(len_ofstring/2)
-print(string_val[0:result])
+import requests
+
+url = "https://covid-193.p.rapidapi.com/countries"
+
+headers = {
+    "X-RapidAPI-Key": "e41fb42417msh9ad0dc2786e5fa6p16e150jsne7b5b7eb8cc2",
+    "X-RapidAPI-Host": "covid-193.p.rapidapi.com"
+}
+
+response = requests.get(url, headers=headers)
+
+if response.status_code == 200:
+    data = response.json()
+    print(data)
+else:
+    print("Error:", response.status_code)
