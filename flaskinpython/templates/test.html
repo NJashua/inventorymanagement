@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel Example</title>
+    <style>
+        /* Your CSS styles for carousel go here */
+    </style>
+</head>
+<body>
+    <div class="carousel">
+        <!-- Your carousel content goes here, including slides -->
+        <div class="slide">
+            <img src="slide1.jpg" alt="Slide 1">
+        </div>
+        <div class="slide">
+            <img src="slide2.jpg" alt="Slide 2">
+        </div>
+        <!-- Add more slides as needed -->
+    </div>
+    <button onclick="nextSlide()">Next Slide</button>
+    <script>
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(n) {
+            slides.forEach(slide => {
+                slide.style.display = 'none';
+            });
+            slides[n].style.display = 'block';
+        }
+
+        function nextSlide() {
+            slideIndex++;
+            if (slideIndex >= slides.length) {
+                slideIndex = 0;
+            }
+            showSlide(slideIndex);
+        }
+
+        // Show the initial slide
+        showSlide(slideIndex);
+    </script>
+</body>
+</html>

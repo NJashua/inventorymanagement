@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company's Data</title>
+    <style>
+        .title-heading {
+            font-family:'Arial';    
+        font-size: 45px;
+        color: black
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr {
+            font-family: "Roboto";
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        /* Add style for green color */
+        .green {
+            color: green;
+        }
+        .red{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="title-heading">Company's Data</h1>
+    <table>
+        <tr  class="column-data">
+            <th>Company Name</th>
+            <th>Symbol</th>
+            <th>Current Price</th>
+            <th>52W high/low</th>
+            <th>Market Cap</th>
+            <th>Industry</th>
+        </tr>
+        {% for company in company_data %}
+        <tr>
+            <td>{{ company[0] }}</td>
+            <td>{{ company[1] }}</td>
+            <td {% if '₹' in company[4] %}class="red"{% endif %}>{{ company[2] }}</td>
+            <td>{{ company[3] }}</td>
+            <td {% if '₹' in company[4] %}class="green"{% endif %}>{{ company[4] }}</td>
+            <td>{{ company[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
