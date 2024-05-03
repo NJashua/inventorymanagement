@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Details</title>
+</head>
+<body>
+    <h1>Student Details</h1>
+    <form action="/plot" method="post">
+        <label for="studentName">Enter Student Name:</label>
+        <input type="text" id="studentName" name="studentName" required>
+        <button type="submit">Search</button>
+    </form>
+    <!-- Display graph here -->
+    <div class="graph-container">
+    <p>{{graph | safe}}</p>
+    </div>
+    <div id="graphContainer"></div>
+</body>
+</html>
