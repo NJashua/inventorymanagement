@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title>Company Details</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
@@ -39,5 +40,89 @@
             {% endif %}
         </div>
     </div>
+=======
+    <title>Weather App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Add custom styles here */
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+
+        .item {
+            margin: 100px;
+        }
+
+        .weather-container {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .weather-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+            margin: auto;
+        }
+        .temperature-graph {
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="weather-container">
+            <form method="post" action="/weather">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="city" placeholder="Enter city">
+                </div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            {% if weather_data %}
+            <div class="weather-card">
+                <h2>Weather in {{ weather_data.city }}</h2>
+                <div class="weather-icon">
+                    <!-- Add weather icon here -->
+                    <img src="{{ weather_data.icon_url }}" alt="{{ weather_data.description }}">
+                </div>
+                <div class="container">
+                    <div class="item">
+                        <h2>Weather</h2>
+                        <p>Temperature: {{ weather_data.temperature }}°C</p>
+                        <p>Humidity: {{ weather_data.humidity }}%</p>
+                        <p>Wind Speed: {{ weather_data.wind_speed }} m/s</p>
+                    </div>
+                    <div class="item">
+                        <h3>{{ weather_data.description }}</h3>
+                        <p>{{ weather_data.name }}</p>
+                        <p>{{ weather_data.week_name }}</p>
+                        <p>{{ weather_data.time }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if temperature_graph %}
+            <div class="temperature-graph">
+                <h3>Temperature Trend</h3>
+                {{ temperature_graph | safe }}
+            </div>
+            {% endif %}
+            
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (optional, if needed) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+>>>>>>> origin/main
 </body>
 </html>
