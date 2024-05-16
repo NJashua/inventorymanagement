@@ -1,0 +1,7 @@
+
+class Config:
+    SNOWFLAKE_USER = 'Nithin',
+    SNOWFLAKE_PASSWORD = 'Nithin@2024',
+    SNOWFLAKE_ACCOUNT = 'bdhriyc-ke24872',
+    SNOWFLAKE_DATABASE = 'INVENTORY',
+    SNOWFLAKE_SCHEMA = 'PUBLIC'

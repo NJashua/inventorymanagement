@@ -1,0 +1,261 @@
+[33mcommit ec68c6040ad0d9ebf03424b6f0fd87480138d369[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Tue May 14 22:22:21 2024 +0530
+
+    merged unrelated histories
+
+[33mcommit ad74ebd52d888a38a4839dbf093badf44e8ece62[m
+Merge: 85a691d 086c192
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Tue May 14 22:21:46 2024 +0530
+
+    merged unrelated histories
+
+[33mcommit 85a691d0350403339ec12581b6c2ae739997775b[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Tue May 14 22:17:11 2024 +0530
+
+    final code
+
+[33mcommit 086c192a05dc30e324dca9c5e168d4e2cd113ff1[m
+Merge: 9fd8934 73106dd
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Fri May 10 12:50:00 2024 +0530
+
+    Merge branch 'main' of https://github.com/NJashua/python
+
+[33mcommit 9fd89348f1ed664d27639585260b3920ed1cec59[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Fri May 10 12:39:19 2024 +0530
+
+    Updated routes and modified some content,
+
+[33mcommit 204f8af7ae8072bc15a07f886c787e4bab4bcee9[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Fri May 10 12:29:44 2024 +0530
+
+    Updated routes and modified some content,
+
+[33mcommit 3439fbb02c952642fd52f9f91c2e02114c812be1[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Fri May 10 12:28:11 2024 +0530
+
+    added company revenue and some other functions
+
+[33mcommit 73106ddd523a9b59047f1ec9e7dfaf5d3867a1d4[m
+Author: Nithin Burugu <139949160+NJashua@users.noreply.github.com>
+Date:   Thu May 9 16:51:38 2024 +0530
+
+    Delete IntrotoOOPS/EmployeManagementSystem.py
+
+[33mcommit 78e09e0c03fbd369cdb27a27a32e934516665a7a[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Thu May 9 16:50:00 2024 +0530
+
+    done company employee inventory management
+
+[33mcommit 8c82b018f265a707a87bdb88f20d2e628b0d4a44[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Tue May 7 19:35:21 2024 +0530
+
+    some changes are done in oops.py cart function modified also payment...etc
+
+[33mcommit 6fd7000632a509920cc8fa0a18b5ac3c257d5642[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon May 6 17:37:00 2024 +0530
+
+    started with oops classes and inheritance
+
+[33mcommit 062b253ccc48372b2990534b1ac05713e8a3b66c[m
+Merge: 8f70ea8 ea01978
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon May 6 17:31:51 2024 +0530
+
+    Resolved merge conflicts
+
+[33mcommit 8f70ea8a9e3663d34e2cd71a6877a72290a26dfb[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon May 6 17:24:45 2024 +0530
+
+    started with oops classes and inheritance
+
+[33mcommit ea01978a4897902c17a4733fe693d799822cc3d1[m
+Merge: 0e10e69 fd090ac
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Fri May 3 18:12:31 2024 +0530
+
+    Merge branch 'main' of https://github.com/NJashua/python
+
+[33mcommit 0e10e694486897b67ef6f788c16dd0c8c6c8d887[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Fri May 3 18:06:00 2024 +0530
+
+    In this, it fetch the weather data based on city name, also some studen marks info represent in graph based on marks
+
+[33mcommit d338045b87b2b6534a4125db0a39b9cb9e1b4c51[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Fri May 3 18:02:33 2024 +0530
+
+    In this, it fetch the weather data based on city name, also some studen marks info represent in graph based on marks
+
+[33mcommit f6644d0beac8005d3dd0668a6e2ca68304cbc6c2[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Fri May 3 17:53:04 2024 +0530
+
+    In this, it fetch the weather data based on city name, also some studen marks info represent in graph based on marks
+
+[33mcommit fe3e15dab066f02b1254f49c1697d6715472eb99[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Wed May 1 22:34:57 2024 +0530
+
+    Updated routes and modified some content,
+
+[33mcommit fd090ac42bec23e89fbdb6a74b2937e2002e4b4c[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon Apr 29 11:03:30 2024 +0530
+
+    updated
+
+[33mcommit dc7ee0b49788d8ab1151fb57ba7176812763cb96[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Sat Apr 27 13:02:38 2024 +0530
+
+    Add ProductService directory
+
+[33mcommit 5d6a7c1d599514b9a992bfe79a5a69f7b2899f1f[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Wed Apr 24 16:30:25 2024 +0530
+
+    working on api calls
+
+[33mcommit 4df81d9681a3e2fccb2d1c7bcb6beaec6e4a0bfd[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Wed Apr 24 09:50:43 2024 +0530
+
+    updated comments
+
+[33mcommit 0cd696dff37ac50b5e8bf23ad80475c25a0c1323[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Wed Apr 24 09:47:07 2024 +0530
+
+    changes are completed and few more updates are there in this, i'll try some other time
+
+[33mcommit 929938f726e794e03c4f9d64425ab835427e9013[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Wed Apr 24 02:10:08 2024 +0530
+
+    some changes are done in product and cart html
+
+[33mcommit b8e91c798eec26c56c15651e23b22a6e5fa93e84[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Tue Apr 23 17:19:08 2024 +0530
+
+    no changes are done
+
+[33mcommit a206313eca9a947b9e5b7632107cd596d4b8517b[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Tue Apr 23 10:48:36 2024 +0530
+
+    some changes are done like adding items to the cart and remving them also styles with sample and better ui
+
+[33mcommit 9c19311998dd333397a89163c125f46c5ed77139[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon Apr 22 23:37:47 2024 +0530
+
+    working on lightweight backend web application
+
+[33mcommit f67895272847e91250bd5588e24246f06fbbf284[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon Apr 22 21:18:46 2024 +0530
+
+    working on products data to build an backend web application
+
+[33mcommit 7cf5be39cb9d09634ac31d2a0503a1b6e8802dc8[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon Apr 22 15:26:52 2024 +0530
+
+    working on basic api's
+
+[33mcommit 336006884682e28d4e98df2a47676161efb5c688[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon Apr 22 11:42:14 2024 +0530
+
+    working on flask webapplication
+
+[33mcommit caeb2cb86184966e6d4395bb216c5aab5f30bbe0[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon Apr 22 09:29:58 2024 +0530
+
+    checking polidrome or not
+
+[33mcommit 14bb2de7ddc861f2df1177e0877c64d67ba7f3eb[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon Apr 22 00:03:33 2024 +0530
+
+    prime number or not
+
+[33mcommit 1c505ef3eedee3d4f4cf98097b5476edf5d06899[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Mon Apr 22 00:02:45 2024 +0530
+
+    its use to know about season based on month and day
+
+[33mcommit 1edffb7ea13bffc351447a6b7720bfff07ad7d9b[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Sat Apr 20 22:16:02 2024 +0530
+
+    more stuff added in ai bot
+
+[33mcommit cde4a6bac5d5c86084befd128ab7fc47a06c5ec4[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Sat Apr 20 21:50:25 2024 +0530
+
+    simple chat bot responds for your intro
+
+[33mcommit f9dcb618882bc1177c1e2e6e6c42d116601004c3[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Sat Apr 20 20:24:23 2024 +0530
+
+    simple calculator application
+
+[33mcommit 37672da1359bb7e6ed458efa120596e3ceae88d3[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Sat Apr 20 14:17:12 2024 +0530
+
+    added try except blocks for error handling
+
+[33mcommit 0e7eecdfce0ec4d2d69cfee9cd7bf8420d1ea412[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Sat Apr 20 00:08:10 2024 +0530
+
+    new pgm for string repetition
+
+[33mcommit 81239c0a167ce793a8edfece1b54a503ae7dad05[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Fri Apr 19 22:12:18 2024 +0530
+
+    checking prime number or not
+
+[33mcommit c5eaee95cc3a5528ee5d73b958a587c21747d5fa[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Fri Apr 19 20:35:36 2024 +0530
+
+    checking word present in a word
+
+[33mcommit a4fd8098bdfd9529b2434938ddbb730dd0341ecf[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Thu Apr 18 20:35:30 2024 +0530
+
+    getting json data trail version
+
+[33mcommit ac4c64945efaae36436b0c65c7d0c599a346abd5[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Thu Apr 18 17:10:56 2024 +0530
+
+    new start
+
+[33mcommit b97234360b00f6b8292843427320c24551711986[m
+Author: NJashua <nithinjashua1@gmail.com>
+Date:   Thu Apr 18 16:29:35 2024 +0530
+
+    some details about company shares and ticker sybols

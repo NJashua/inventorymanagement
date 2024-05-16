@@ -1,0 +1,84 @@
+from flask import Flask, request, render_template
+import mpld3
+import json
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+app = Flask(__name__)
+
+# JSON data of students
+data = [
+    {
+      "name": "Kaustubh",
+      "marks": {
+        "English": 85,
+        "Maths": 90,
+        "Science": 88,
+        "Social": 78
+      }
+    },
+    {
+      "name": "Nithin",
+      "marks": {
+        "English": 75,
+        "Maths": 82,
+        "Science": 80,
+        "Social": 85
+      }
+    },
+    {
+      "name": "Jayanth",
+      "marks": {
+        "English": 92,
+        "Maths": 88,
+        "Science": 78,
+        "Social": 90
+      }
+    },
+    {
+      "name": "Keertan",
+      "marks": {
+        "English": 80,
+        "Maths": 85,
+        "Science": 92,
+        "Social": 87
+      }
+    }
+]
+ 
+
+def get_details(name):
+    for student in data:
+        if student["name"] == name:
+            marks = student["marks"]
+            subjects = list(marks.keys())
+            height = list(marks.values())
+
+            plt.figure(figsize=(6, 4))
+            plt.bar(np.arange(4), height, color=['lightgray', 'yellow', 'lavender', 'slateblue'])
+            plt.xticks(np.arange(4), subjects, color='orange', rotation=45, fontweight='600', fontsize=10, ha='right')
+            plt.title(f"Marks Obtained by {name}")
+            plt.xlabel("Subjects")
+            plt.ylabel("Marks")
+
+            # Save the plot as HTML
+            html_graph = mpld3.fig_to_html(plt.gcf())
+
+            plt.close()  # Close the plot to prevent it from displaying twice
+            return html_graph
+    else:
+        return f"No data found for {name}"
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/plot", methods=["POST"])
+def plot():
+    student_name = request.form.get("studentName")
+    graph_html = get_details(student_name)
+    return render_template("index.html", graph=graph_html)
+
+if __name__ == "__main__":
+    app.run(debug=True)

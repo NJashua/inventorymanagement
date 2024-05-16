@@ -1,0 +1,5 @@
+ID,Name,Position,Department,Email,Salary
+94c9e,John Doe,Manager,Sales,john.doe@example.com,50000
+4cc0d,Jane Smith,Engineer,Engineering,jane.smith@example.com,60000
+29347,David Brown,Analyst,Finance,david.brown@example.com,55000
+7e9b5,Emily White,HR Manager,Human Resources,emily.white@example.com,65000

@@ -1,0 +1,59 @@
+In the data structure & algorithm which helps in working on data more, how we can organize the data and how we can get the data from the databases or wharehouses, in DSA it helps to mostly
+getting an understing about data formats and other information for example library the books are stored in organize foramat for quick picking and inserting like that
+
+there are built in and user defined types in DSA 
+those are 
+
+List,
+Tuple,
+Set,
+Dictionary... (* You can expect more infor from now onwords...!)
+
+
+
+
+
+
+
+import requests
+
+url = "https://covid-193.p.rapidapi.com/history"
+
+querystring = {"country":"usa","day":"2020-06-02"}
+
+headers = {
+	"X-RapidAPI-Key": "SIGN-UP-FOR-KEY",
+	"X-RapidAPI-Host": "covid-193.p.rapidapi.com"
+}
+
+response = requests.get(url, headers=headers, params=querystring)
+
+print(response.json())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mid = left + (right - left) // 2
+
+mid = 1 + (12 - 1) // 2
