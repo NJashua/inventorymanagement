@@ -1,0 +1,97 @@
+{
+	"info": {
+		"_postman_id": "NJ",
+		"name": "InventoryManagement",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Product Details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/get_product_details/Product1",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "5000",
+					"path": ["get_product_details", "Product1"]
+				}
+			}
+		},
+		{
+			"name": "Delete Expired Products",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/delete_expired_products",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "5000",
+					"path": ["delete_expired_products"]
+				}
+			}
+		},
+		{
+			"name": "Display Products Details",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/display_products_details",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "5000",
+					"path": ["display_products_details"]
+				}
+			}
+		},
+		{
+			"name": "Insert Data",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"purchase_id\":\"1\",\"supplier_id\":\"2\",\"supplier_name\":\"Supplier1\",\"product_name\":\"Product1\",\"description\":\"Description1\",\"num_products_received\":10,\"date_of_purchase\":\"2022-01-01\",\"category\":\"Category1\",\"unit_cost\":100,\"selling_price\":150,\"reorder_level\":5,\"expiry_date\":\"2023-01-01\",\"location_id\":\"1\",\"location_aisle\":\"Aisle1\",\"location_shelf\":\"Shelf1\",\"location_bin\":\"Bin1\",\"location_zone\":\"Zone1\"}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/insert_data",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "5000",
+					"path": ["insert_data"]
+				}
+			}
+		},
+		{
+			"name": "Order Service Details",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"order_id\":\"1\",\"product_name\":\"Product1\",\"number_shipped\":5,\"order_date\":\"2022-01-01\"}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/order_service_details",
+					"protocol": "http",
+					"host": ["localhost"],
+					"port": "5000",
+					"path": ["order_service_details"]
+				}
+			}
+		}
+	]
+}
