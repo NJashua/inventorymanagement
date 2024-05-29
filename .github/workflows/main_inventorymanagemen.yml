@@ -2,7 +2,7 @@
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 # More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy Python app to Azure Web App - InventoryManagemen
+name: Build and deploy Python app to Azure Web App - inventorymanagemen
 
 on:
   push:
@@ -65,14 +65,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_BEA7C9780C5547179FFBFB97D89A3716 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_56481680B1864D17AC534C978A287020 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_152EC43A69FE4B09B07FA0908D9A7DB5 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_7D27BED043D64DF28E6D70CA881BEB20 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BBC5BF8AB321456082EB6CF504C2EEF7 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DAFC72395D3A4652B82FEC1FF7E1A354 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: 'InventoryManagemen'
+          app-name: 'inventorymanagemen'
           slot-name: 'Production'
           
