@@ -1,0 +1,50 @@
+name: Run Postman Collection
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run-postman:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Newman
+        run: npm install -g newman
+
+      - name: Run Postman Collection
+        run: |
+          newman run postman/Inventory_Management.postman_collection.json -r cli,html --reporter-html-export results/report.html
+
+      - name: Send Email with Report
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Postman Test Results
+          body: |
+            Hello Team,
+            
+            Please find attached the Postman test report.
+            Yoh guys enjoy pandagowh..:)
+            
+            Regards,
+            Your CI/CD James Bond System
+          to: burugunithin1@gmail.com
+          from: nithinjashua1@gmail.com
+          content_type: text/html
+          attachments: results/report.html
