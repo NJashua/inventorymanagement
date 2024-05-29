@@ -1,1 +1,4 @@
-
+Python==3.11.9
+snowflake-connector-python==2.4.6
+Flask==3.0.3
+Werkzeug==3.0.2
