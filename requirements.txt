@@ -1,62 +1,27 @@
-import os
-from flask import Flask, jsonify
-from snowflake.connector import connect
-
-app = Flask(__name__)
-
-def get_data_from_snowflake():
-    with connect(
-        user=os.environ["SNOWFLAKE_USER"],
-        password=os.environ["SNOWFLAKE_PASSWORD"],
-        account=os.environ["SNOWFLAKE_ACCOUNT"],
-    ) as conn:
-        with conn.cursor() as cur:
-            cur.execute("SELECT * FROM my_table")
-            return cur.fetchall()
-
-@app.route("/data")
-def data():
-    data = get_data_from_snowflake()
-    return jsonify(data)
-
-if __name__ == "__main__":
-    app.run()
-
-
-import json
-import os
-from unittest.mock import MagicMock
-
-import pytest
-from flask import Flask
-from snowflake.connector import connect
-
-from app import app, get_data_from_snowflake
-
-@pytest.fixture
-def mock_snowflake_connection():
-    with connect.mock() as mocked_connect:
-        yield mocked_connect
-
-@pytest.fixture
-def client():
-    app.config["TESTING"] = True
-
-    with app.test_client() as client:
-        yield client
-
-def test_data(client, mock_snowflake_connection):
-    mock_snowflake_connection.return_value.cursor.return_value.fetchall.return_value = [(1, "test")]
-
-    response = client.get("/data")
-    data = json.loads(response.data)
-
-    assert response.status_code == 200
-    assert data == [(1, "test")]
-
-def test_get_data_from_snowflake_mock(mock_snowflake_connection):
-    mock_snowflake_connection.return_value.cursor.return_value.fetchall.return_value = [(1, "test")]
-
-    result = get_data_from_snowflake()
-
-    assert result == [(1, "test")]
+Flask==3.0.3
+Flask-Login==0.6.3
+Werkzeug==3.0.3
+snowflake-connector-python==3.10.1
+Jinja2==3.1.4
+itsdangerous==2.2.0
+click==8.1.7
+blinker==1.8.2
+MarkupSafe==2.1.5
+asn1crypto==1.5.1
+cffi==1.16.0
+cryptography==42.0.7
+pyOpenSSL==24.1.0
+pyjwt==2.8.0
+pytz==2024.1
+requests==2.32.2
+packaging==24.0
+charset-normalizer==3.3.2
+idna==3.7
+certifi==2024.2.2
+typing-extensions==4.12.0
+filelock==3.14.0
+sortedcontainers==2.4.0
+platformdirs==4.2.2
+tomlkit==0.12.5
+pycparser==2.22
+urllib3==2.2.1
