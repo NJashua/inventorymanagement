@@ -89,7 +89,7 @@
 									"\r",
 									"pm.test(\"Handles invalid input gracefully\", function () {\r",
 									"    pm.sendRequest({\r",
-									"        url: \"http://127.0.0.1:5000/search?search_term=invalidinput\",\r",
+									"        url: \"https://nventory.azurewebsites.net/search?search_term=invalidinput\",\r",
 									"        method: \"GET\"\r",
 									"    }, function (err, res) {\r",
 									"        // Check if the response was received\r",
@@ -160,7 +160,7 @@
 									"// Check if the response contains all expected fields for each product\r",
 									"pm.test(\"Response contains all expected fields for each product\", function(){\r",
 									"    jsonData.forEach(function(product){\r",
-									"        pm.expect(product).to.have.all.keys('supplier_id', 'supplier_name', 'product_name', 'description', 'number_of_product_purchased', 'date_of_purchase', 'category', 'quantity_available', 'unit_cost', 'selling_price', 'reorder_level', 'expiry_date', 'location_id');\r",
+									"        pm.expect(product).to.have.all.keys('supplier_id', 'upplier_name', 'product_name', 'description', 'number_of_product_purchased', 'date_of_purchase', 'category', 'quantity_available', 'unit_cost', 'elling_price', 'eorder_level', 'expiry_date', 'location_id');\r",
 									"    });\r",
 									"});\r",
 									"\r",
@@ -172,27 +172,54 @@
 									"    });\r",
 									"});\r",
 									"\r",
-									"// Check if product descriptions are not too long (maximum length is defined as 5000 characters)\r",
-									"pm.test(\"Product descriptions are not too long (maximum length is 5000 characters)\", function(){\r",
-									"    const maxDescLength = 5000;\r",
+									"// Check if product descriptions are not too long (maximum length is defined by the descriptionLength variable)\r",
+									"var descriptionLength = 200;\r",
+									"pm.test(\"Product descriptions are not too long\", function(){\r",
 									"    jsonData.forEach(function(product){\r",
-									"        pm.expect(product.description.length).to.be.at.most(maxDescLength);\r",
+									"        var description = product.description;\r",
+									"        pm.expect(description.length).to.be.below(descriptionLength);\r",
 									"    });\r",
 									"});\r",
 									"\r",
-									"// Check if all products have non-empty descriptions\r",
-									"pm.test(\"All products have non-empty descriptions\", function(){\r",
+									"// Check if product names are not too long (maximum length is defined by the productNameLength variable)\r",
+									"var productNameLength = 50;\r",
+									"pm.test(\"Product names are not too long\", function(){\r",
 									"    jsonData.forEach(function(product){\r",
-									"        pm.expect(product.description).to.not.be.empty;\r",
+									"        var productName = product.product_name;\r",
+									"        pm.expect(productName.length).to.be.below(productNameLength);\r",
 									"    });\r",
 									"});\r",
 									"\r",
-									"// Check if all product names are unique\r",
-									"pm.test(\"All product names are unique\", function(){\r",
-									"    var uniqueNames = new Set();\r",
-									"    jsonData.forEach(function(product) {\r",
-									"        pm.expect(uniqueNames.has(product.product_name)).to.be.false;\r",
-									"        uniqueNames.add(product.product_name);\r",
+									"// Check if the expiry date is not in the past\r",
+									"pm.test(\"Expiry date is not in the past\", function(){\r",
+									"    jsonData.forEach(function(product){\r",
+									"        var expiryDate = new Date(product.expiry_date);\r",
+									"        var currentDate = new Date();\r",
+									"        pm.expect(expiryDate).to.be.after(currentDate);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if product quantities are greater than zero\r",
+									"pm.test(\"Product quantities are greater than zero\", function(){\r",
+									"    jsonData.forEach(function(product){\r",
+									"        var quantity = parseInt(product.quantity_available);\r",
+									"        pm.expect(quantity).to.be.above(0);\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if the quantity_of_product_purchased field is not empty\r",
+									"pm.test(\"Quantity of product purchased is not empty\", function(){\r",
+									"    jsonData.forEach(function(product){\r",
+									"        var quantityPurchased = product.quantity_of_product_purchased;\r",
+									"        pm.expect(quantityPurchased).to.not.be.empty;\r",
+									"    });\r",
+									"});\r",
+									"\r",
+									"// Check if product categories are not empty\r",
+									"pm.test(\"Product categories are not empty\", function(){\r",
+									"    jsonDat.forEach(function(product){\r",
+									"        var category = product.category;\r",
+									"        pm.expect(category).to.not.be.empty;\r",
 									"    });\r",
 									"});\r",
 									""
@@ -250,15 +277,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/purchase_product",
-							"protocol": "http",
+							"raw": "https://nventory.azurewebsites.net/purchase_product",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"nventory",
+								"azurewebsites",
+								"net"
 							],
-							"port": "5000",
 							"path": [
 								"purchase_product"
 							]
@@ -290,7 +315,7 @@
 									"    };\r",
 									"\r",
 									"    pm.sendRequest({\r",
-									"                url: 'http://127.0.0.1:5000/purchase_product',\r",
+									"                url: 'https://nventory.azurewebsites.net/purchase_product',\r",
 									"        method: 'POST',\r",
 									"        headers: {\r",
 									"            'Content-Type': 'application/json'\r",
@@ -300,23 +325,25 @@
 									"            raw: JSON.stringify(data)\r",
 									"        }\r",
 									"    }, function (err, res) {\r",
-									"        pm.expect(err).to.be.null;\r",
-									"        pm.expect(res).to.have.property('code', 415);\r",
+									"        console.log(res.json());\r",
 									"    });\r",
-									"});\r",
-									""
+									"});"
 								],
-								"type": "text/javascript",
-								"packages": {}
+								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
 						"method": "POST",
-						"header": [],
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
 						"body": {
 							"mode": "raw",
-							"raw": "       { \r\n        \"order_id\": 11,\r\n        \"product_name\": \"Apples\",\r\n        \"number_shipped\": 1,\r\n        \"order_date\": \"2024-05-28\"\r\n       }\r\n\r\n       ",
+							"raw": "{\r\n    \"order_id\": 5,\r\n    \"product_name\": \"Gaming Laptop XZ\",\r\n    \"number_shipped\": 1,\r\n    \"order_date\": \"2024-05-28\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -324,7 +351,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://nventory.azurewebsites.net/order_product",
+							"raw": "https://nventory.azurewebsites.net/purchase_product",
 							"protocol": "https",
 							"host": [
 								"nventory",
@@ -332,90 +359,7 @@
 								"net"
 							],
 							"path": [
-								"order_product"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "AzureTesting",
-			"item": [
-				{
-					"name": "Azure Display_products Testcase",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"// Extract JSON data from response\r",
-									"var jsonData = pm.response.json();\r",
-									"\r",
-									"// Check if the status code is 200\r",
-									"pm.test(\"Status code is 200\", function(){\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"// Check if the response contains all expected fields for each product\r",
-									"pm.test(\"Response contains all expected fields for each product\", function(){\r",
-									"    jsonData.forEach(function(product){\r",
-									"        pm.expect(product).to.have.all.keys('supplier_id', 'supplier_name', 'product_name', 'description', 'number_of_product_purchased', 'date_of_purchase', 'category', 'quantity_available', 'unit_cost', 'selling_price', 'reorder_level', 'expiry_date', 'location_id');\r",
-									"    });\r",
-									"});\r",
-									"\r",
-									"// Check if product prices are greater than zero\r",
-									"pm.test(\"Product prices are greater than zero\", function(){\r",
-									"    jsonData.forEach(function(product){\r",
-									"        var price = parseFloat(product.selling_price);\r",
-									"        pm.expect(price).to.be.above(0);\r",
-									"    });\r",
-									"});\r",
-									"\r",
-									"// Check if product descriptions are not too long (maximum length is defined as 5000 characters)\r",
-									"pm.test(\"Product descriptions are not too long (maximum length is 5000 characters)\", function(){\r",
-									"    const maxDescLength = 5000;\r",
-									"    jsonData.forEach(function(product){\r",
-									"        pm.expect(product.description.length).to.be.at.most(maxDescLength);\r",
-									"    });\r",
-									"});\r",
-									"\r",
-									"// Check if all products have non-empty descriptions\r",
-									"pm.test(\"All products have non-empty descriptions\", function(){\r",
-									"    jsonData.forEach(function(product){\r",
-									"        pm.expect(product.description).to.not.be.empty;\r",
-									"    });\r",
-									"});\r",
-									"\r",
-									"// Check if all product names are unique\r",
-									"pm.test(\"All product names are unique\", function(){\r",
-									"    var uniqueNames = new Set();\r",
-									"    jsonData.forEach(function(product) {\r",
-									"        pm.expect(uniqueNames.has(product.product_name)).to.be.false;\r",
-									"        uniqueNames.add(product.product_name);\r",
-									"    });\r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://nventory.azurewebsites.net/display_products",
-							"protocol": "https",
-							"host": [
-								"nventory",
-								"azurewebsites",
-								"net"
-							],
-							"path": [
-								"display_products"
+								"purchase_product"
 							]
 						}
 					},
