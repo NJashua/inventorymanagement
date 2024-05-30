@@ -26,8 +26,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
-
       - name: Zip artifact for deployment
         run: zip -r release.zip ./* -x "venv/*"
 
@@ -59,9 +57,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D18BE59980CF49E4B5458BD28CF71476 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AB8C1BF1485242E198CB2979B428519C }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C272F2CC01974200959930821675DD1B }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
@@ -114,8 +112,8 @@ jobs:
         with:
           server_address: smtp.example.com
           server_port: 587
-          username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }}
+          username: ${{ secrets.EMAIL }}
+          password: ${{ secrets.PASS }}
           subject: Postman Test Results and Deployment Status
           body: |
             Hello Team Stars,
