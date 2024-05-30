@@ -79,7 +79,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'  # Update Node.js version to 16 or higher
 
       - name: Install Newman
         run: npm install -g newman
@@ -123,3 +123,4 @@ jobs:
           to: burugunithin1@gmail.com
           from: nithinjashua1@gmail.com
           content_type: text/plain
+
