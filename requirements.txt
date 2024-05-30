@@ -1,4 +1,62 @@
-Flask
-pytest
-snowflake-connector-python
-pytest-mock
+import os
+from flask import Flask, jsonify
+from snowflake.connector import connect
+
+app = Flask(__name__)
+
+def get_data_from_snowflake():
+    with connect(
+        user=os.environ["SNOWFLAKE_USER"],
+        password=os.environ["SNOWFLAKE_PASSWORD"],
+        account=os.environ["SNOWFLAKE_ACCOUNT"],
+    ) as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM my_table")
+            return cur.fetchall()
+
+@app.route("/data")
+def data():
+    data = get_data_from_snowflake()
+    return jsonify(data)
+
+if __name__ == "__main__":
+    app.run()
+
+
+import json
+import os
+from unittest.mock import MagicMock
+
+import pytest
+from flask import Flask
+from snowflake.connector import connect
+
+from app import app, get_data_from_snowflake
+
+@pytest.fixture
+def mock_snowflake_connection():
+    with connect.mock() as mocked_connect:
+        yield mocked_connect
+
+@pytest.fixture
+def client():
+    app.config["TESTING"] = True
+
+    with app.test_client() as client:
+        yield client
+
+def test_data(client, mock_snowflake_connection):
+    mock_snowflake_connection.return_value.cursor.return_value.fetchall.return_value = [(1, "test")]
+
+    response = client.get("/data")
+    data = json.loads(response.data)
+
+    assert response.status_code == 200
+    assert data == [(1, "test")]
+
+def test_get_data_from_snowflake_mock(mock_snowflake_connection):
+    mock_snowflake_connection.return_value.cursor.return_value.fetchall.return_value = [(1, "test")]
+
+    result = get_data_from_snowflake()
+
+    assert result == [(1, "test")]
