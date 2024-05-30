@@ -24,21 +24,39 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-  deploy:
+      - name: Create artifact directory
+        run: mkdir -p artifact-directory
+
+      - name: Copy files to artifact directory
+        run: cp -r * artifact-directory/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: python-app
+          path: artifact-directory
+
+  download-artifacts:
     runs-on: ubuntu-latest
     needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
           name: python-app
+          path: downloaded-artifacts  # Specify the directory to store the downloaded artifacts
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build, download-artifacts]  # Ensure download-artifacts job completes before deploy
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
       - name: Unzip artifact for deployment
-        run: unzip python-app/release.zip -d app
+        run: unzip downloaded-artifacts/artifact-directory/release.zip -d app
 
       # Add steps to deploy the app to Azure Web App
 
@@ -86,14 +104,12 @@ jobs:
         with:
           server_address: smtp.example.com
           server_port: 587
-          username: ${{ secrets.EMAIL }}
-          password: ${{ secrets.PASS }}
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
           subject: Postman Test Results and Deployment Status
           body: |
             Hello Team Stars,
-
             All Postman tests passed, and the deployment was successful.
-
             Regards,
             Your CI/CD System
           to: burugunithin1@gmail.com
