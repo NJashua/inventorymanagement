@@ -1,134 +1,50 @@
-name: Build and deploy Python app to Azure Web App - nventory
+name: Azure Login and Workflow
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  build:
+  azure-login-and-workflow:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Python version
-        uses: actions/setup-python@v1
-        with:
-          python-version: '3.11'
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        enable-AzPSSession: false
+        environment: azurecloud
+        allow-no-subscriptions: false
+        audience: api://AzureADTokenExchange
+        auth-type: SERVICE_PRINCIPAL
+        client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_25B70C8C12774DA2BA313899DBDBF26E }}
+        tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2ac36cee-0617-4ac0-bebf-e1ce5dfab86c }}
 
-      - name: Create and start virtual environment
-        run: |
-          python -m venv venv
-          source venv/bin/activate
+    - name: Run Your Azure Commands
+      run: |
+        # Add your Azure CLI or Azure PowerShell commands here
+        # For example:
+        # az group list
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
-
-      - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v3
-        with:
-          name: python-app
-          path: |
-            release.zip
-            !venv/
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-    permissions:
-      id-token: write
-
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: python-app
-
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-
-      - name: Login to Azure
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
-
-
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'nventory'
-          slot-name: 'Production'
-
-  test:
-    runs-on: ubuntu-latest
-    needs: deploy
-
-    outputs:
-      tests-passed: ${{ steps.parse-results.outputs.tests-passed }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-
-      - name: Install Newman
-        run: npm install -g newman
-
-      - name: Run Postman Collection
-        run: |
-          newman run postman/Inventory_Management.postman_collection.json --reporters cli,json --reporter-json-export results/report.json --env-var baseURL=https://nventory.azurewebsites.net
-
-      - name: Parse Test Results
-        id: parse-results
-        run: |
-          tests_failed=$(jq '.run.failures | length' results/report.json)
-          if [ "$tests_failed" -eq 0 ]; then
-            echo "All tests passed."
-            echo "::set-output name=tests-passed::true"
-          else
-            echo "Tests failed."
-            echo "::set-output name=tests-passed::false"
-          fi
-
-  send-email:
-    runs-on: ubuntu-latest
-    needs: [deploy, test]
-    if: always()
-
-    steps:
-      - name: Determine Email Subject and Body
-        id: prepare-email
-        run: |
-          if [ "${{ needs.test.outputs.tests-passed }}" == "true" ]; then
-            echo "subject=Postman Test Results and Deployment Status" >> $GITHUB_ENV
-            echo "body=Hello Team Stars,\n\nAll Postman tests passed, and the deployment was successful.\n\nRegards,\nYour CI/CD System" >> $GITHUB_ENV
-          else
-            echo "subject=Workflow Failure Notification" >> $GITHUB_ENV
-            echo "body=Hello Team Stars,\n\nThe workflow failed. Please check the logs for more details.\n\nRegards,\nYour CI/CD System" >> $GITHUB_ENV
-          fi
-
-      - name: Send Email Notification
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.your-email-provider.com # Replace with your actual SMTP server
-          server_port: 587 # Replace with your actual SMTP port
-          username: ${{ secrets.EMAIL }}
-          password: ${{ secrets.PASS }}
-          subject: ${{ env.subject }}
-          body: ${{ env.body }}
-          to: burugunithin1@gmail.com
-          from: nithinjashua1@gmail.com
+    - name: Send Email Notification on Failure
+      if: ${{ failure() }}
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.your-email-provider.com
+        server_port: 587
+        username: ${{ secrets.EMAIL }}
+        password: ${{ secrets.PASS }}
+        subject: Workflow Failure Notification
+        body: |
+          Hello Team Stars,
+          
+          The workflow failed. Please check the logs for more details.
+          
+          Regards,
+          Your CI/CD System
+        to: burugunithin1@gmail.com
+        from: ${{ secrets.EMAIL }}
