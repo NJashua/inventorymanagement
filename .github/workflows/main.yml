@@ -58,9 +58,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D18BE59980CF49E4B5458BD28CF71476 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AB8C1BF1485242E198CB2979B428519C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C272F2CC01974200959930821675DD1B }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
@@ -99,7 +99,8 @@ jobs:
           else
             echo "Tests failed."
             echo "::set-output name=tests-passed::false"
-          fi
+        outputs:
+          tests-passed: ${{ steps.parse-results.outputs.tests-passed }}
 
   send-email:
     runs-on: ubuntu-latest
