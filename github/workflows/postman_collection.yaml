@@ -48,35 +48,40 @@
 #           from: nithinjashua1@gmail.com
 #           content_type: text/html
 #           attachments: results/report.html
-name: Run Postman Collection
+
+
+name: Build, Deploy, and Test
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  run-postman:
+  build-deploy-and-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14'
+      # Other build steps (setting up Python, installing dependencies, zipping artifact, etc.)
 
-      - name: Install Newman
-        run: npm install -g newman
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
+        with:
+          app-name: 'nventory'
+          slot-name: 'Production'
 
       - name: Run Postman Collection
-        run: |
-          newman run postman/Inventory_Management.postman_collection.json -r cli,html --reporter-html-export results/report.html
+        uses: bahmutov/newman-action@v2
+        with:
+          collection: path/to/your/collection.json
+          environment: path/to/your/environment.json
+          reporters: cli,html
+          reporter-html-export: results/report.html
 
       - name: Send Email with Report
         uses: dawidd6/action-send-mail@v3
@@ -98,4 +103,3 @@ jobs:
           from: nithinjashua1@gmail.com
           content_type: text/html
           attachments: results/report.html
-
