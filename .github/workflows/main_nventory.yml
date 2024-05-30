@@ -121,13 +121,12 @@ jobs:
           else
             echo "subject=Workflow Failure Notification" >> $GITHUB_ENV
             echo "body=Hello Team Stars,\n\nThe workflow failed. Please check the logs for more details.\n\nRegards,\nYour CI/CD System" >> $GITHUB_ENV
-          fi
 
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
         with:
-          server_address: smtp.example.com
-          server_port: 587
+          server_address: smtp.gmail.com
+          server_port: 587 # or 465 for SSL
           username: ${{ secrets.EMAIL }}
           password: ${{ secrets.PASS }}
           subject: ${{ env.subject }}
