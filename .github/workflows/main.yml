@@ -86,7 +86,7 @@ jobs:
 
       - name: Run Postman Collection
         run: |
-          newman run postman/Inventory_Management.postman_collection.json --reporters cli,json --reporter-json-export results/report.json
+          newman run postman/Inventory_Management.postman_collection.json --reporters cli,json --reporter-json-export results/report.json --env-var baseURL=https://nventory.azurewebsites.net
 
       - name: Parse Test Results
         id: parse-results
