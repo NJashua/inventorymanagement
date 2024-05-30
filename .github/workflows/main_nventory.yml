@@ -24,6 +24,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: python-app
+          path: path/to/artifacts  # Adjust this path to match your artifacts
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
@@ -91,9 +97,7 @@ jobs:
           subject: Postman Test Results and Deployment Status
           body: |
             Hello Team Stars,
-
             All Postman tests passed, and the deployment was successful.
-
             Regards,
             Your CI/CD System
           to: burugunithin1@gmail.com
