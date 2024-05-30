@@ -44,7 +44,7 @@ jobs:
             
             Regards,
             Your CI/CD James Bond System
-          to: burugunithin1@gmail.com
+          to: burugunithin1@gmail.com, nithin.burugu@jda.com
           from: nithinjashua1@gmail.com
           content_type: text/html
           attachments: results/report.html
