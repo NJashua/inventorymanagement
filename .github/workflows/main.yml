@@ -1,4 +1,4 @@
-name: Build, Deploy, Test, and Notify
+# name: Build, Deploy, and Test
 
 on:
   push:
@@ -11,9 +11,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Set up Python version
+      - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.11'
@@ -24,13 +25,15 @@ jobs:
           source venv/bin/activate
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          source venv/bin/activate
+          pip install -r requirements.txt
 
       - name: Zip artifact for deployment
         run: zip -r release.zip ./* -x "venv/*"
 
       - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: python-app
           path: release.zip
@@ -41,25 +44,22 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    permissions:
-      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: python-app
-          path: downloaded-artifacts
 
       - name: Unzip artifact for deployment
-        run: unzip downloaded-artifacts/release.zip -d app
+        run: unzip release.zip -d app
 
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D18BE59980CF49E4B5458BD28CF71476 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_AB8C1BF1485242E198CB2979B428519C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C272F2CC01974200959930821675DD1B }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
@@ -74,53 +74,57 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # Update Node.js version to 16 or higher
+          node-version: '14'
 
       - name: Install Newman
         run: npm install -g newman
 
       - name: Run Postman Collection
         run: |
-          newman run postman/Inventory_Management.postman_collection.json --reporters cli,json --reporter-json-export results/report.json
+          newman run postman/Inventory_Management.postman_collection.json \
+            --env-var "baseUrl=https://nventory.azurewebsites.net" \
+            --reporters cli,json \
+            --reporter-json-export results/report.json
 
-      - name: Parse Test Results
-        id: parse-results
-        run: |
-          tests_passed=$(jq '.run.failures | length' results/report.json)
-          if [ "$tests_passed" -eq 0 ]; then
-            echo "All tests passed."
-            echo "::set-output name=tests-passed::true"
-          else
-            echo "Tests failed."
-            echo "::set-output name=tests-passed::false"
-          fi
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: results/report.json
 
   send-email:
     runs-on: ubuntu-latest
-    needs: [deploy, test]
-
-    if: ${{ needs.test.outputs.tests-passed == 'true' }}
+    needs: test
 
     steps:
+      - name: Download Test Report
+        uses: actions/download-artifact@v4
+        with:
+          name: test-report
+
       - name: Send Email Notification
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.example.com
           server_port: 587
-          username: ${{ secrets.EMAIL }}
-          password: ${{ secrets.PASS }}
-          subject: Postman Test Results and Deployment Status
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: Postman Test Results
           body: |
-            Hello Team Stars,
-            All Postman tests passed, and the deployment was successful.
+            Hello Team,
+
+            Please find attached the Postman test report. The deployment was completed successfully, and the test results are as follows:
+
+            {{ steps.newman-run.outputs.test-summary }}
+
             Regards,
             Your CI/CD System
-          to: burugunithin1@gmail.com
-          from: nithinjashua1@gmail.com
-          content_type: text/plain
-
+          to: team@example.com
+          from: no-reply@example.com
+          content_type: text/html
+          attachments: results/report.json
