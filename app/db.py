@@ -220,3 +220,5 @@ class SnowflakeDB:
         finally:
             cursor.close()
             connection.close()
+
+
