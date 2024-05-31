@@ -8,27 +8,26 @@ class SnowflakeDB:
 
     def get_connection(self):
         return snowflake.connector.connect(**self.config)
-    
+
     def get_product_details_with_location(self, search_term):
         try:
             connection = self.get_connection()
             cursor = connection.cursor()
             search_term = '%{}%'.format(search_term)
-            
+
             # Command to get product details
-            cursor.execute(""" 
+            cursor.execute("""
                 SELECT p.* 
                 FROM PRODUCT p 
-                WHERE p.PRODUCT_NAME LIKE ?
+                WHERE p.PRODUCT_NAME LIKE %s
             """, (search_term,))
             products = cursor.fetchall()
             product_column_names = [desc[0].lower() for desc in cursor.description]
             products_list = [dict(zip(product_column_names, product)) for product in products]
-            
+
             # Command to get product location details
-            cursor.execute(""" 
+            cursor.execute("""
                 SELECT DISTINCT I.* 
-<<<<<<< HEAD
                 FROM PRODUCT P 
                 INNER JOIN LOCATIONS I ON p.LOCATION_ID = I.LOCATION_ID 
                 WHERE p.PRODUCT_NAME LIKE %s
@@ -36,13 +35,13 @@ class SnowflakeDB:
             locations = cursor.fetchall()
             location_column_names = [desc[0].lower() for desc in cursor.description]
             location_list = [dict(zip(location_column_names, location)) for location in locations]
-            
+
             # Formatting response
             response = {
                 'products': products_list,
                 'locations': location_list,
             }
-            
+
             # Getting shortcut details
             if products_list and location_list:
                 product_name = products_list[0]['product_name']
@@ -51,11 +50,14 @@ class SnowflakeDB:
                 location_aisle = location_details.get('aisle', 'N/A')
                 location_shelf = location_details.get('shelf', 'N/A')
                 location_bin = location_details.get('bin', 'N/A')
-                
-                Location = f"""
-                    Quick instruction to locate "{product_name}": Go to the {location_zone} Zone& Find {location_aisle} rak &- Locate Shelf {location_shelf} in Aisle {location_aisle} &- Look for {location_bin} Bin in Shelf {location_shelf} & - Collect the product {product_name} from {location_bin}""".strip()
-                response['location'] = Location
-            
+
+                location_description = (
+                    f'Quick instruction to locate "{product_name}": Go to the {location_zone} Zone, '
+                    f'find aisle {location_aisle}, locate shelf {location_shelf}, and look for bin {location_bin}. '
+                    f'Collect the product "{product_name}" from bin {location_bin}.'
+                )
+                response['location'] = location_description
+
             return jsonify(response)
         
         except snowflake.connector.Error as e:
@@ -82,8 +84,8 @@ class SnowflakeDB:
     def display_products_details(self):
         try:
             self.delete_expired_products()
-            conn = self.get_connection()
-            cursor = conn.cursor()
+            connection = self.get_connection()
+            cursor = connection.cursor()
             cursor.execute("SELECT * FROM PRODUCT")
             products = cursor.fetchall()
             column_names = [desc[0].lower() for desc in cursor.description]
@@ -93,12 +95,12 @@ class SnowflakeDB:
             return jsonify({'error': str(e)})
         finally:
             cursor.close()
-            conn.close()
+            connection.close()
 
     def insert_data(self, data):
         try:
-            conn = self.get_connection()
-            cursor = conn.cursor()
+            connection = self.get_connection()
+            cursor = connection.cursor()
 
             # Extracting data from the input
             purchase_id = data.get('purchase_id')
@@ -173,14 +175,13 @@ class SnowflakeDB:
                 VALUES (%s, %s, %s, %s, %s)
             """, (location_id, location_aisle, location_shelf, location_bin, location_zone))
             
-            conn.commit()
+            connection.commit()
             return jsonify({"message": "Data inserted successfully"}), 201
         except snowflake.connector.Error as e:
             return jsonify({'error': str(e)}), 500
         finally:
             cursor.close()
-            conn.close()
-
+            connection.close()
 
     def order_service_details(self, data):
         try:
@@ -215,7 +216,7 @@ class SnowflakeDB:
             """, (order_id, product_name, number_shipped, order_date))
             
             connection.commit()
-            return jsonify({'Message': 'Order placed and product quantity updated successfully'})
+            return jsonify({'message': 'Order placed and product quantity updated successfully'})
         except snowflake.connector.Error as e:
             return jsonify({"error": str(e)}), 500
         finally:

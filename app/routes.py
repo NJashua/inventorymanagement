@@ -1,4 +1,4 @@
-from flask import Blueprint, request, make_response
+from flask import Blueprint, request, jsonify
 from app.db import SnowflakeDB
 
 # Creating Blueprint for the routes
@@ -28,7 +28,7 @@ def display_products():
 @bp.route('/purchase_product', methods=['POST'])
 def insert():
     data = request.get_json()
-    return db.insert_purchase_data(data)
+    return db.insert_data(data)
 
 @bp.route('/order_product', methods=['POST'])
 def order_product():
