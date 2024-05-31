@@ -13,13 +13,13 @@ class SnowflakeDB:
         try:
             connection = self.get_connection()
             cursor = connection.cursor()
-            search_term = f"%{search_term}%"
+            search_term = '%{}%'.format(search_term)
             
             # Command to get product details
             cursor.execute(""" 
                 SELECT p.* 
                 FROM PRODUCT p 
-                WHERE p.PRODUCT_NAME LIKE %s
+                WHERE p.PRODUCT_NAME LIKE ?
             """, (search_term,))
             products = cursor.fetchall()
             product_column_names = [desc[0].lower() for desc in cursor.description]
@@ -28,6 +28,7 @@ class SnowflakeDB:
             # Command to get product location details
             cursor.execute(""" 
                 SELECT DISTINCT I.* 
+<<<<<<< HEAD
                 FROM PRODUCT P 
                 INNER JOIN LOCATIONS I ON p.LOCATION_ID = I.LOCATION_ID 
                 WHERE p.PRODUCT_NAME LIKE %s
@@ -220,5 +221,3 @@ class SnowflakeDB:
         finally:
             cursor.close()
             connection.close()
-
-
