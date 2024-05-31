@@ -7,11 +7,26 @@ class SnowflakeDB:
         self.config = config
 
     def get_connection(self):
-        return snowflake.connector.connect(**self.config)
+        try:
+            return snowflake.connector.connect(**self.config)
+        except snowflake.connector.Error as e:
+            error_message = str(e)
+            if "Your user account has been temporarily locked" in error_message:
+                return jsonify({
+                    "error": "Your user account has been temporarily locked due to too many failed attempts. Try again after 15 minutes or contact your account administrator for assistance.",
+                    "details": error_message
+                }), 403
+            return jsonify({"error": error_message}), 500
 
     def get_product_details_with_location(self, search_term):
+        connection = None
+        cursor = None
         try:
             connection = self.get_connection()
+            if isinstance(connection, tuple):
+                # Return the error response directly if get_connection returns an error
+                return connection
+
             cursor = connection.cursor()
             search_term = '%{}%'.format(search_term)
 
@@ -59,17 +74,25 @@ class SnowflakeDB:
                 response['location'] = location_description
 
             return jsonify(response)
-        
+
         except snowflake.connector.Error as e:
             return jsonify({"error": str(e)})
-        
+
         finally:
-            cursor.close()
-            connection.close()
+            if cursor:
+                cursor.close()
+            if connection and not isinstance(connection, tuple):
+                connection.close()
 
     def delete_expired_products(self):
+        connection = None
+        cursor = None
         try:
             connection = self.get_connection()
+            if isinstance(connection, tuple):
+                # Return the error response directly if get_connection returns an error
+                return connection
+            
             cursor = connection.cursor()
             current_date = datetime.datetime.now().date()
             cursor.execute("DELETE FROM PRODUCT WHERE EXPIRY_DATE < %s", (current_date,))
@@ -78,13 +101,21 @@ class SnowflakeDB:
         except snowflake.connector.Error as e:
             print(f"Error while deleting products: {str(e)}")
         finally:
-            cursor.close()
-            connection.close()
+            if cursor:
+                cursor.close()
+            if connection and not isinstance(connection, tuple):
+                connection.close()
 
     def display_products_details(self):
+        connection = None
+        cursor = None
         try:
             self.delete_expired_products()
             connection = self.get_connection()
+            if isinstance(connection, tuple):
+                # Return the error response directly if get_connection returns an error
+                return connection
+
             cursor = connection.cursor()
             cursor.execute("SELECT * FROM PRODUCT")
             products = cursor.fetchall()
@@ -94,8 +125,10 @@ class SnowflakeDB:
         except snowflake.connector.Error as e:
             return jsonify({'error': str(e)})
         finally:
-            cursor.close()
-            connection.close()
+            if cursor:
+                cursor.close()
+            if connection and not isinstance(connection, tuple):
+                connection.close()
 
     def insert_data(self, data):
         try:
