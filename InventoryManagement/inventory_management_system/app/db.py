@@ -24,13 +24,11 @@ class SnowflakeDB:
         try:
             connection = self.get_connection()
             if isinstance(connection, tuple):
-                # Return the error response directly if get_connection returns an error
                 return connection
 
             cursor = connection.cursor()
             search_term = '%{}%'.format(search_term)
 
-            # Command to get product details
             cursor.execute("""
                 SELECT p.* 
                 FROM PRODUCT p 
@@ -40,7 +38,6 @@ class SnowflakeDB:
             product_column_names = [desc[0].lower() for desc in cursor.description]
             products_list = [dict(zip(product_column_names, product)) for product in products]
 
-            # Command to get product location details
             cursor.execute("""
                 SELECT DISTINCT I.* 
                 FROM PRODUCT P 
@@ -51,13 +48,11 @@ class SnowflakeDB:
             location_column_names = [desc[0].lower() for desc in cursor.description]
             location_list = [dict(zip(location_column_names, location)) for location in locations]
 
-            # Formatting response
             response = {
                 'products': products_list,
                 'locations': location_list,
             }
 
-            # Getting shortcut details
             if products_list and location_list:
                 product_name = products_list[0]['product_name']
                 location_details = location_list[0]
@@ -90,7 +85,6 @@ class SnowflakeDB:
         try:
             connection = self.get_connection()
             if isinstance(connection, tuple):
-                # Return the error response directly if get_connection returns an error
                 return connection
             
             cursor = connection.cursor()
@@ -113,7 +107,6 @@ class SnowflakeDB:
             self.delete_expired_products()
             connection = self.get_connection()
             if isinstance(connection, tuple):
-                # Return the error response directly if get_connection returns an error
                 return connection
 
             cursor = connection.cursor()
@@ -131,11 +124,15 @@ class SnowflakeDB:
                 connection.close()
 
     def insert_data(self, data):
+        connection = None
+        cursor = None
         try:
             connection = self.get_connection()
+            if isinstance(connection, tuple):
+                return connection
+
             cursor = connection.cursor()
 
-            # Extracting data from the input
             purchase_id = data.get('purchase_id')
             supplier_id = data.get('supplier_id')
             supplier_name = data.get('supplier_name', 'Unknown Supplier')
@@ -154,17 +151,14 @@ class SnowflakeDB:
             location_bin = data.get('location_bin')
             location_zone = data.get('location_zone')
 
-            # Check for required fields
             required_fields = [purchase_id, supplier_id, product_name, num_products_received, date_of_purchase, unit_cost, reorder_level]
             if None in required_fields:
                 return jsonify({"error": "Missing required fields or fields cannot be NULL"}), 400
 
-            # Check if the product already exists
             cursor.execute("SELECT * FROM PRODUCT WHERE PRODUCT_NAME = %s", (product_name,))
             product = cursor.fetchone()
 
             if product:
-                # If product exists, update the quantity and reorder level
                 column_names = [desc[0].lower() for desc in cursor.description]
                 product_dict = dict(zip(column_names, product))
                 
@@ -177,7 +171,6 @@ class SnowflakeDB:
                     WHERE PRODUCT_NAME = %s
                 """, (new_quantity, new_reorder_level, unit_cost, product_name))
             else:
-                # If product does not exist, insert a new product
                 cursor.execute("""
                     INSERT INTO PRODUCT (
                         SUPPLIER_ID, SUPPLIER_NAME, PRODUCT_NAME, DESCRIPTION, NUMBER_OF_PRODUCT_PURCHASED,
@@ -190,19 +183,16 @@ class SnowflakeDB:
                     reorder_level, expiry_date, location_id
                 ))
 
-            # Insert into PURCHASES
             cursor.execute("""
                 INSERT INTO PURCHASES (PURCHASEID, SUPPLIERID, DATEOFPURCHASE, NUMOFPRODUCTSRECEIVED, PRODUCT_NAME, CATEGORY)
                 VALUES (%s, %s, %s, %s, %s, %s)
             """, (purchase_id, supplier_id, date_of_purchase, num_products_received, product_name, category))
 
-            # Insert into SUPPLIERS
             cursor.execute("""
                 INSERT INTO SUPPLIERS (SUPPLIERID, SUPPLIERNAME, PRODUCT_NAME, CATEGORY, DELIVERY_DATE, DELIVERY_QUANTITY)
                 VALUES (%s, %s, %s, %s, %s, %s)
             """, (supplier_id, supplier_name, product_name, category, date_of_purchase, num_products_received))
 
-            # Insert into LOCATIONS
             cursor.execute("""
                 INSERT INTO LOCATIONS (LOCATION_ID, AISLE, SHELF, BIN, ZONE)
                 VALUES (%s, %s, %s, %s, %s)
@@ -213,12 +203,19 @@ class SnowflakeDB:
         except snowflake.connector.Error as e:
             return jsonify({'error': str(e)}), 500
         finally:
-            cursor.close()
-            connection.close()
+            if cursor:
+                cursor.close()
+            if connection and not isinstance(connection, tuple):
+                connection.close()
 
     def order_service_details(self, data):
+        connection = None
+        cursor = None
         try:
             connection = self.get_connection()
+            if isinstance(connection, tuple):
+                return connection
+
             cursor = connection.cursor()
 
             order_id = data.get('order_id')
@@ -227,31 +224,38 @@ class SnowflakeDB:
             order_date = data.get('order_date')
 
             if not order_id or not product_name or not number_shipped or not order_date:
-                return jsonify({"error": "Missing required fields"}), 400
-            
+                return jsonify({"error": "Missing required fields or fields cannot be NULL"}), 400
+
             cursor.execute("SELECT QUANTITY_AVAILABLE FROM PRODUCT WHERE PRODUCT_NAME = %s", (product_name,))
             product = cursor.fetchone()
+
             if not product:
-                return jsonify({"error": f"Product {product_name} not found"}), 404
+                return jsonify({"error": "Product not found"}), 404
             
-            current_quantity = product[0]
+            quantity_available = product[0]
 
-            if current_quantity < number_shipped:
-                return jsonify({'error': f'Not enough quantity for product {product_name}'}), 404
+            if quantity_available < number_shipped:
+                return jsonify({"error": "Not enough stock available"}), 400
 
-            new_quantity = current_quantity - number_shipped
-
-            cursor.execute("UPDATE PRODUCT SET QUANTITY_AVAILABLE = %s WHERE PRODUCT_NAME = %s", (new_quantity, product_name))
+            new_quantity = quantity_available - number_shipped
 
             cursor.execute("""
-                INSERT INTO ORDERS (ORDERID, PRODUCTNAME, NUMBERSHIPPED, ORDERDATE) 
+                UPDATE PRODUCT
+                SET QUANTITY_AVAILABLE = %s
+                WHERE PRODUCT_NAME = %s
+            """, (new_quantity, product_name))
+
+            cursor.execute("""
+                INSERT INTO ORDERS (ORDERID, PRODUCT_NAME, NUMBER_SHIPPED, ORDER_DATE)
                 VALUES (%s, %s, %s, %s)
             """, (order_id, product_name, number_shipped, order_date))
             
             connection.commit()
-            return jsonify({'message': 'Order placed and product quantity updated successfully'})
+            return jsonify({"message": "Order created successfully"}), 201
         except snowflake.connector.Error as e:
-            return jsonify({"error": str(e)}), 500
+            return jsonify({'error': "Order creation failed", "details": str(e)}), 500
         finally:
-            cursor.close()
-            connection.close()
+            if cursor:
+                cursor.close()
+            if connection and not isinstance(connection, tuple):
+                connection.close()

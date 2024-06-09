@@ -1,0 +1,15 @@
+{
+	"id": "f43358e7-a86c-4fbb-82ba-52898ae1ea7b",
+	"values": [
+		{
+			"key": "baseUrl",
+			"value": "https://inventorymanagem.azurewebsites.net/",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"name": "Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2024-06-09T18:14:41.625Z",
+	"_postman_exported_using": "Postman/11.1.25"
+}

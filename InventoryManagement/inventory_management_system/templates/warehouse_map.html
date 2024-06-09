@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Warehouse Map</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        .path-line {
+            fill: none;
+            stroke: red;
+            stroke-width: 2px;
+        }
+        .zone {
+            fill: lightgrey;
+            stroke: black;
+            stroke-width: 1px;
+        }
+        .bin {
+            fill: lightblue;
+            stroke: black;
+            stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Warehouse Map</h1>
+    <div id="map"></div>
+    <script>
+        async function drawMap(productName) {
+            const response = await fetch(`/shortest_path/${productName}`);
+            const data = await response.json();
+
+            if (data.error) {
+                console.error("Error:", data.error);
+                return;
+            }
+
+            const pathCoordinates = data.path;
+
+            const width = 1200;
+            const height = 800;
+            const margin = { top: 20, right: 20, bottom: 20, left: 20 };
+
+            const svg = d3.select("#map")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+            svg.append("rect").attr("x", 30).attr("y", 60).attr("width", 100).attr("height", 200).attr("class", "zone");
+            svg.append("rect").attr("x", 230).attr("y", 60).attr("width", 100).attr("height", 200).attr("class", "zone");
+            svg.append("rect").attr("x", 430).attr("y", 60).attr("width", 100).attr("height", 200).attr("class", "zone");
+            svg.append("rect").attr("x", 630).attr("y", 60).attr("width", 100).attr("height", 200).attr("class", "zone");
+
+            svg.append("text").attr("x", 35).attr("y", 75).text("Zone A1").attr("font-family", "Arial").attr("font-size", "14");
+            svg.append("text").attr("x", 235).attr("y", 75).text("Zone B1").attr("font-family", "Arial").attr("font-size", "14");
+            svg.append("text").attr("x", 435).attr("y", 75).text("Zone A2").attr("font-family", "Arial").attr("font-size", "14");
+            svg.append("text").attr("x", 635).attr("y", 75).text("Zone B2").attr("font-family", "Arial").attr("font-size", "14");
+
+            svg.append("path")
+                .datum(pathCoordinates)
+                .attr("class", "path-line")
+                .attr("d", d3.line()
+                    .x(d => d.x)
+                    .y(d => d.y)
+                );
+        }
+
+        // Example usage: drawMap('CoolMaster');
+        drawMap('CoolMaster');
+    </script>
+</body>
+</html>
